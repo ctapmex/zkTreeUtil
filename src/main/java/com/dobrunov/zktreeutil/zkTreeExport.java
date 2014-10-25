@@ -5,10 +5,14 @@ package com.dobrunov.zktreeutil;
  */
 
 import java.io.IOException;
+import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.data.Stat;
 
 public class zkTreeExport implements Watcher, Job {
 
@@ -46,9 +50,51 @@ public class zkTreeExport implements Watcher, Job {
 
     private void exportChild(ZooKeeper zk) {
         try {
+            dumpChild(zk, outputDir + znode, "", "");
             zk.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        }
+    }
+
+    private void dumpChild(ZooKeeper zk, String outputPath, String znodeParent, String znode) throws Exception {
+
+        String znodePath = znodeParent + znode;
+
+        System.out.println("znodePath: " + znodePath);
+        System.out.println("outputPath: " + outputPath);
+        String currznode = znodePath.length() == 0 ? "/" : znodePath;
+        List<String> children = zk.getChildren(currznode, false);
+        if (!children.isEmpty()) {
+
+            // ensure parent dir is created
+            File f = new File(outputPath);
+            boolean s = f.mkdirs();
+
+            // this znode is a dir, so ensure the directory is created and build a __znode value in its dir
+            writeZnode(zk, outputPath + "/_znode", currznode);
+
+            for (String c : children) {
+                System.out.println("c: " + c);
+                dumpChild(zk, outputPath + "/" + c, znodePath + "/", c);
+            }
+        } else {
+            // this znode has no contents to write a plane file with the znode contents here
+            writeZnode(zk, outputPath, currznode);
+        }
+    }
+
+    private void writeZnode(ZooKeeper zk, String outFile, String znode) throws Exception {
+        Stat stat = new Stat();
+        byte[] data = zk.getData(znode, false, stat);
+        if (data != null && data.length > 0 && stat.getEphemeralOwner() == 0) {
+            String str = new String(data);
+            if (!str.equals("null")) {
+                FileOutputStream out = new FileOutputStream(outFile);
+                out.write(data);
+                out.flush();
+                out.close();
+            }
         }
     }
 
