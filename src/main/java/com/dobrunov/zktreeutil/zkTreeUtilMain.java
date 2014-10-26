@@ -6,9 +6,8 @@ package com.dobrunov.zktreeutil;
 
 import org.apache.commons.cli.*;
 
-import com.dobrunov.zktreeutil.zkTreeExport;
-
 public class zkTreeUtilMain {
+    final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(zkTreeUtilMain.class);
 
     public static void main(String[] args) {
         Options options = initOptions();

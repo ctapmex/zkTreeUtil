@@ -19,29 +19,30 @@ public class zkTreeExport implements Watcher, Job {
     private String zkServer;
     private String outputDir;
     private String znode;
-
+    private final org.slf4j.Logger logger;
 
     public zkTreeExport(String zkServer, String znode, String outputDir) {
+        logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
         this.zkServer = zkServer;
         this.outputDir = outputDir;
         this.znode = znode;
     }
 
     public void go() {
-        System.out.println("dumping data from zookeeper");
-        System.out.println("zookeeper server: " + zkServer);
-        System.out.println("reading from zookeeper path: " + znode);
-        System.out.println("dumping to local directory: " + outputDir);
+        logger.info("Export data from zookeeper");
+        logger.info("Zookeeper server: " + zkServer);
+        logger.info("Reading from zookeeper path: " + znode);
+        logger.info("Export to local directory: " + outputDir);
 
         try {
             ZooKeeper zk = new ZooKeeper(zkServer + znode, 10000, this);
             while (!zk.getState().isConnected()) {
-                System.out.println("connecting to " + zkServer + " with chroot " + znode);
+                logger.info("Connecting to " + zkServer + " with chroot " + znode);
                 Thread.sleep(500L);
             }
             exportChild(zk);
         } catch (IOException e) {
-            System.err.println("error connecting to " + zkServer);
+            logger.error("Error connecting to " + zkServer);
             System.exit(1);
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -61,8 +62,8 @@ public class zkTreeExport implements Watcher, Job {
 
         String znodePath = znodeParent + znode;
 
-        System.out.println("znodePath: " + znodePath);
-        System.out.println("outputPath: " + outputPath);
+        logger.debug("znodePath: " + znodePath);
+        logger.debug("outputPath: " + outputPath);
         String currznode = znodePath.length() == 0 ? "/" : znodePath;
         List<String> children = zk.getChildren(currznode, false);
         if (!children.isEmpty()) {
@@ -75,7 +76,7 @@ public class zkTreeExport implements Watcher, Job {
             writeZnode(zk, outputPath + "/_znode", currznode);
 
             for (String c : children) {
-                System.out.println("c: " + c);
+                logger.debug("c: " + c);
                 dumpChild(zk, outputPath + "/" + c, znodePath + "/", c);
             }
         } else {
