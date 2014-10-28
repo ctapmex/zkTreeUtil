@@ -9,7 +9,10 @@ import java.io.FileOutputStream;
 
 import java.util.ArrayList;
 
-public class zkTreeExport implements Job {
+/**
+ * Export zookeeper tree to file system
+ */
+public class zkExportToFS implements Job {
 
     private String zkServer;
     private String outputDir;
@@ -17,7 +20,7 @@ public class zkTreeExport implements Job {
     private final org.slf4j.Logger logger;
 
 
-    public zkTreeExport(String zkServer, String znode, String outputDir) {
+    public zkExportToFS(String zkServer, String znode, String outputDir) {
         logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
         this.zkServer = zkServer;
         this.outputDir = outputDir;

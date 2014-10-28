@@ -38,7 +38,7 @@ public class zkTreeUtilMain {
                 if (cmd.hasOption("p")) {
                     znode = cmd.getOptionValue("p");
                 }
-                job = new zkTreeExport(server, znode, outputDir);
+                job = new zkExportToFS(server, znode, outputDir);
             } else {
                 usage(options);
             }
