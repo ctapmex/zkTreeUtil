@@ -31,14 +31,18 @@ public class zkTreeUtilMain {
         } else {
 
             String server = cmd.getOptionValue("z");
+            String znode = "";
+            if (cmd.hasOption("p")) {
+                znode = cmd.getOptionValue("p");
+            }
 
-            if (cmd.hasOption("e") && cmd.hasOption("o")) {
-                String outputDir = cmd.getOptionValue("o");
-                String znode = "";
-                if (cmd.hasOption("p")) {
-                    znode = cmd.getOptionValue("p");
-                }
-                job = new zkExportToFS(server, znode, outputDir);
+            if (cmd.hasOption("e") && cmd.hasOption("od")) {
+                String output_dir = cmd.getOptionValue("od");
+                job = new zkExportToFS(server, znode, output_dir);
+            }
+            if (cmd.hasOption("e") && cmd.hasOption("of")) {
+                String output_file = cmd.getOptionValue("of");
+                job = new zkExportToFile(server, znode, output_file);
             } else {
                 usage(options);
             }
@@ -57,11 +61,17 @@ public class zkTreeUtilMain {
 
         options.addOption("e", "export", false, "exports the zookeeper tree");
 
-        Option xmlfile = OptionBuilder.withArgName("dir").hasArg()
+        Option outdir = OptionBuilder.withArgName("dir").hasArg()
                 .withDescription("output directory to which znode information should be written (must be a normal, empty directory)")
-                .create("o");
-        xmlfile.setLongOpt("output-dir");
-        options.addOption(xmlfile);
+                .create("od");
+        outdir.setLongOpt("output-dir");
+        options.addOption(outdir);
+
+        Option plainfile = OptionBuilder.withArgName("filename").hasArg()
+                .withDescription("output file to which znode information should be written")
+                .create("of");
+        plainfile.setLongOpt("output-file");
+        options.addOption(plainfile);
 
         Option znodepath = OptionBuilder.withArgName("znodepath").hasArg()
                 .withDescription("path to the zookeeper subtree rootnode.")
