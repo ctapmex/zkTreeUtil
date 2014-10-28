@@ -34,7 +34,7 @@ public class zkTreeUtilMain {
 
             if (cmd.hasOption("e") && cmd.hasOption("o")) {
                 String outputDir = cmd.getOptionValue("o");
-                String znode = "/";
+                String znode = "";
                 if (cmd.hasOption("p")) {
                     znode = cmd.getOptionValue("p");
                 }
