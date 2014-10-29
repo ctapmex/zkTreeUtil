@@ -41,7 +41,7 @@ public class zkExportToFS implements Job {
     }
 
     private void writeZnode(zNode znode) {
-        if (znode.data != null && znode.data.length > 0 && znode.stat.getEphemeralOwner() == 0) {
+        if (znode.data != null && znode.data.length > 0) {
             String str = new String(znode.data);
             if (!str.equals("null")) {
                 String outFile = znode.has_children ? "_znode" : znode.path;

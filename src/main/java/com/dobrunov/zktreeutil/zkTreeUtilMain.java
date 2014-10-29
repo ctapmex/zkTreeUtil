@@ -39,8 +39,7 @@ public class zkTreeUtilMain {
             if (cmd.hasOption("e") && cmd.hasOption("od")) {
                 String output_dir = cmd.getOptionValue("od");
                 job = new zkExportToFS(server, znode, output_dir);
-            }
-            if (cmd.hasOption("e") && cmd.hasOption("of")) {
+            } else if (cmd.hasOption("e") && cmd.hasOption("of")) {
                 String output_file = cmd.getOptionValue("of");
                 job = new zkExportToFile(server, znode, output_file);
             } else {

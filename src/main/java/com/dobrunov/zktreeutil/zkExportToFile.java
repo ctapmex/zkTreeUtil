@@ -33,7 +33,7 @@ public class zkExportToFile implements Job {
         try {
             writer = new FileWriter(output_file);
             for (zNode znode : list) {
-                writer.write("path=" + znode.path);
+                writer.write("path=" + start_znode + znode.path);
                 writer.write("\t");
                 if (znode.data != null && znode.data.length > 0) {
                     String str = new String(znode.data);
@@ -42,7 +42,7 @@ public class zkExportToFile implements Job {
                     }
                 }
                 writer.write("\t");
-                if (znode.stat.getEphemeralOwner() == 1) {
+                if (znode.stat.getEphemeralOwner() != 0) {
                     writer.write("type='ephemeral'");
                 }
                 writer.write("\r\n");
