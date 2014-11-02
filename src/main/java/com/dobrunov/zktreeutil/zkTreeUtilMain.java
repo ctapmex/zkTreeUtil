@@ -42,6 +42,9 @@ public class zkTreeUtilMain {
             } else if (cmd.hasOption("e") && cmd.hasOption("of")) {
                 String output_file = cmd.getOptionValue("of");
                 job = new zkExportToFile(server, znode, output_file);
+            } else if (cmd.hasOption("e") && cmd.hasOption("xf")) {
+                String output_xfile = cmd.getOptionValue("xf");
+                job = new zkExportToXmlFile(server, znode, output_xfile);
             } else {
                 usage(options);
             }
@@ -71,6 +74,12 @@ public class zkTreeUtilMain {
                 .create("of");
         plainfile.setLongOpt("output-file");
         options.addOption(plainfile);
+
+        Option xmlfile = OptionBuilder.withArgName("filename").hasArg()
+                .withDescription("output xml-file to which znode information should be written")
+                .create("xf");
+        xmlfile.setLongOpt("output-xmlfile");
+        options.addOption(xmlfile);
 
         Option znodepath = OptionBuilder.withArgName("znodepath").hasArg()
                 .withDescription("path to the zookeeper subtree rootnode.")
