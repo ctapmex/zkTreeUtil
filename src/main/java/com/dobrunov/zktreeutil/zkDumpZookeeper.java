@@ -15,8 +15,8 @@ import java.util.List;
 public class zkDumpZookeeper implements Watcher {
     private String zkServer;
     private String start_znode;
-    ArrayList<zNode> zktree;
-    ZooKeeper zk = null;
+    private TreeNode<zNode> zktree = null;
+    private ZooKeeper zk = null;
     private final org.slf4j.Logger logger;
 
 
@@ -24,25 +24,26 @@ public class zkDumpZookeeper implements Watcher {
         logger = org.slf4j.LoggerFactory.getLogger(this.getClass());
         this.zkServer = zkServer;
         this.start_znode = znode;
-        zktree = new ArrayList<>();
     }
 
-    public ArrayList<zNode> getZktree() {
+    public TreeNode<zNode> getZktree() throws Exception {
         try {
             connect();
             dump();
             disconnect();
+            return zktree;
         } catch (IOException e) {
             logger.error("Error connecting to " + zkServer);
+            throw new Exception("tree is empty");
         } catch (Exception e) {
             logger.error(e.getMessage());
+            throw new Exception("tree is empty");
         }
-        return zktree;
     }
 
     private void connect() throws IOException, InterruptedException {
         logger.debug("connect to zookeeper server");
-        zk = new ZooKeeper(zkServer + start_znode, 10000, this);
+        zk = new ZooKeeper(zkServer + start_znode, 100000, this);
         while (!zk.getState().isConnected()) {
             logger.info("Connecting to " + zkServer + " with chroot " + start_znode);
             Thread.sleep(500L);
@@ -54,24 +55,30 @@ public class zkDumpZookeeper implements Watcher {
         zk.close();
     }
 
-    public void dump() throws Exception {
+    private void dump() throws Exception {
         logger.info("start dump tree from zookeeper server");
-        dumpChild("", "");
+        dumpChild("", "", null);
         logger.info("end dump tree from zookeeper server");
     }
 
-    private void dumpChild(String znodeParent, String znode) throws Exception {
+    private void dumpChild(String znodeParent, String znode, TreeNode<zNode> tree_node) throws Exception {
         String znodePath = (znodeParent.equals("/") ? "" : znodeParent) + "/" + znode;
         List<String> children = zk.getChildren(znodePath, false);
 
         Stat stat = new Stat();
         byte[] data = zk.getData(znodePath, false, stat);
         zNode z = new zNode(znode, znodePath, data, stat, !children.isEmpty());
-        zktree.add(z);
+        TreeNode<zNode> tnode;
+        if (tree_node != null) {
+            tnode = tree_node.addChild(z);
+        } else {
+            zktree = new TreeNode<>(z);
+            tnode = zktree;
+        }
 
-        logger.debug("read znode path: " + znodePath );
+        logger.debug("read znode path: " + znodePath);
         for (String c : children) {
-            dumpChild(znodePath, c);
+            dumpChild(znodePath, c, tnode);
         }
     }
 

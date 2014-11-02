@@ -1,7 +1,6 @@
 package com.dobrunov.zktreeutil;
 
 import java.io.*;
-import java.util.ArrayList;
 
 /**
  * Created by ctapmex on 29.10.2014.
@@ -10,7 +9,7 @@ public class zkExportToFile implements Job {
     private String zkServer;
     private String output_file;
     private String start_znode;
-    private ArrayList<zNode> list;
+    private TreeNode<zNode> zktree;
     private final org.slf4j.Logger logger;
 
 
@@ -23,8 +22,12 @@ public class zkExportToFile implements Job {
 
     public void go() {
         zkDumpZookeeper dump = new zkDumpZookeeper(zkServer, start_znode);
-        list = dump.getZktree();
-        writeFile();
+        try {
+            zktree = dump.getZktree();
+            writeFile();
+        } catch (Exception e) {
+            logger.debug(e.getMessage());
+        }
     }
 
     private void writeFile() {
@@ -32,17 +35,20 @@ public class zkExportToFile implements Job {
         Writer writer = null;
         try {
             writer = new FileWriter(output_file);
-            for (zNode znode : list) {
-                writer.write("path=" + start_znode + znode.path);
+            for (TreeNode<zNode> znode : zktree) {
+                if (znode.data == null) {
+                    continue;
+                }
+                writer.write("path=" + start_znode + znode.data.path);
                 writer.write("\t");
-                if (znode.data != null && znode.data.length > 0) {
-                    String str = new String(znode.data);
+                if (znode.data.data != null && znode.data.data.length > 0) {
+                    String str = new String(znode.data.data);
                     if (!str.equals("null")) {
                         writer.write("val=" + str);
                     }
                 }
                 writer.write("\t");
-                if (znode.stat.getEphemeralOwner() != 0) {
+                if (znode.data.stat.getEphemeralOwner() != 0) {
                     writer.write("type='ephemeral'");
                 }
                 writer.write("\r\n");

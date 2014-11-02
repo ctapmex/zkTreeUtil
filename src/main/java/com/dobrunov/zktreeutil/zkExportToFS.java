@@ -7,8 +7,6 @@ package com.dobrunov.zktreeutil;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import java.util.ArrayList;
-
 /**
  * Export zookeeper tree to file system
  */
@@ -29,14 +27,18 @@ public class zkExportToFS implements Job {
 
     public void go() {
         zkDumpZookeeper dump = new zkDumpZookeeper(zkServer, start_znode);
-        ArrayList<zNode> list = dump.getZktree();
-        logger.info("write zookeeper tree to folder "+outputDir);
-        for (zNode znode : list) {
-            if (znode.has_children) {
-                File f = new File(outputDir + znode.path);
-                boolean s = f.mkdirs();
+        try {
+            TreeNode<zNode> zktree = dump.getZktree();
+            logger.info("write zookeeper tree to folder " + outputDir);
+            for (TreeNode<zNode> znode : zktree) {
+                if (znode.data.has_children) {
+                    File f = new File(outputDir + znode.data.path);
+                    boolean s = f.mkdirs();
+                }
+                writeZnode(znode.data);
             }
-            writeZnode(znode);
+        } catch (Exception e) {
+            logger.debug(e.getMessage());
         }
     }
 
