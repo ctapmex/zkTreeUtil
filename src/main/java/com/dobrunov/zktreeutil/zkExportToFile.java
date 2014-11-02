@@ -21,12 +21,12 @@ public class zkExportToFile implements Job {
     }
 
     public void go() {
-        zkDumpZookeeper dump = new zkDumpZookeeper(zkServer, start_znode);
         try {
+            zkDumpZookeeper dump = new zkDumpZookeeper(zkServer, start_znode);
             zktree = dump.getZktree();
             writeFile();
         } catch (Exception e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -36,9 +36,6 @@ public class zkExportToFile implements Job {
         try {
             writer = new FileWriter(output_file);
             for (TreeNode<zNode> znode : zktree) {
-                if (znode.data == null) {
-                    continue;
-                }
                 writer.write("path=" + start_znode + znode.data.path);
                 writer.write("\t");
                 if (znode.data.data != null && znode.data.data.length > 0) {
@@ -65,6 +62,5 @@ public class zkExportToFile implements Job {
             }
         }
     }
-
 
 }

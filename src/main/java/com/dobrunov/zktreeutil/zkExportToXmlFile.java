@@ -32,7 +32,7 @@ public class zkExportToXmlFile implements Job {
         try {
             zktree = dump.getZktree();
             writeFile();
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.debug(e.getMessage());
         }
     }
@@ -44,6 +44,7 @@ public class zkExportToXmlFile implements Job {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
             Element root = doc.createElement("root");
+            root.setAttribute("path", start_znode);
             doc.appendChild(root);
 
             fillXml(doc, root, zktree);
@@ -75,22 +76,5 @@ public class zkExportToXmlFile implements Job {
             root.appendChild(node);
             fillXml(doc, node, znode);
         }
-        /*for (zNode znode : list) {
-            Element root = doc.createElement("zknode");
-          /*  writer.write("path=" + start_znode + znode.path);
-            writer.write("\t");
-            if (znode.data != null && znode.data.length > 0) {
-                String str = new String(znode.data);
-                if (!str.equals("null")) {
-                    writer.write("val=" + str);
-                }
-            }
-            writer.write("\t");
-            if (znode.stat.getEphemeralOwner() != 0) {
-                writer.write("type='ephemeral'");
-            }
-            writer.write("\r\n");*/
-//        }
-
     }
 }

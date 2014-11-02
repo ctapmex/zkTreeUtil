@@ -27,32 +27,42 @@ public class zkDumpZookeeper implements Watcher {
     }
 
     public TreeNode<zNode> getZktree() throws Exception {
-        try {
-            connect();
-            dump();
-            disconnect();
-            return zktree;
-        } catch (IOException e) {
-            logger.error("Error connecting to " + zkServer);
-            throw new Exception("tree is empty");
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new Exception("tree is empty");
-        }
+        connect();
+        dump();
+        disconnect();
+        return zktree;
     }
 
-    private void connect() throws IOException, InterruptedException {
+    private void connect() throws Exception {
         logger.debug("connect to zookeeper server");
-        zk = new ZooKeeper(zkServer + start_znode, 100000, this);
-        while (!zk.getState().isConnected()) {
-            logger.info("Connecting to " + zkServer + " with chroot " + start_znode);
-            Thread.sleep(500L);
+        try {
+            zk = new ZooKeeper(zkServer + start_znode, 10000, this);
+            int i = 0;
+            while (!zk.getState().isConnected() && i < 10) {
+                logger.info("Connecting to " + zkServer + " with chroot " + start_znode);
+                Thread.sleep(1000L);
+                i++;
+            }
+            if (i >= 10 && !zk.getState().isConnected()) {
+                throw new Exception();
+            }
+
+        } catch (Exception e) {
+            logger.error("Error connecting to " + zkServer);
+            logger.error(e.getMessage());
+            throw new Exception();
         }
     }
 
-    private void disconnect() throws InterruptedException {
+    private void disconnect() throws Exception {
         logger.debug("disconnect from zookeeper server");
-        zk.close();
+        try {
+            zk.close();
+        } catch (Exception e) {
+            logger.error("Error disconnecting from " + zkServer);
+            logger.error(e.getMessage());
+            throw new Exception();
+        }
     }
 
     private void dump() throws Exception {
