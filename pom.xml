@@ -6,7 +6,7 @@
 
     <groupId>com.dobrunov</groupId>
     <artifactId>zkTreeUtil</artifactId>
-    <version>0.2</version>
+    <version>0.5</version>
     <packaging>jar</packaging>
 
 
@@ -68,7 +68,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>${project.build.directory}/distrib</outputDirectory>
+                    <outputDirectory>${project.build.directory}/distrib/lib</outputDirectory>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -79,7 +79,32 @@
                         <manifestEntries>
                         </manifestEntries>
                     </archive>
+                    <excludes>
+                        <exclude>*.*</exclude>
+                    </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/distrib/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <targetPath>bin</targetPath>
+                                    <directory>${basedir}/src/main/resources/bin</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -108,11 +133,6 @@
                     <artifactId>jms</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.13</version>
         </dependency>
     </dependencies>
 </project>
