@@ -31,7 +31,7 @@ public class zkExportToFile implements Job {
     }
 
     private void writeFile() {
-        logger.info("write zookeeper tree to file " + output_file);
+        logger.info("begin write zookeeper tree to file " + output_file);
         Writer writer = null;
         try {
             writer = new FileWriter(output_file);
@@ -61,6 +61,7 @@ public class zkExportToFile implements Job {
                 }
             }
         }
+        logger.info("begin write zookeeper tree to file " + output_file);
     }
 
 }

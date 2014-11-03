@@ -29,7 +29,7 @@ public class zkExportToFS implements Job {
         zkDumpZookeeper dump = new zkDumpZookeeper(zkServer, start_znode);
         try {
             TreeNode<zNode> zktree = dump.getZktree();
-            logger.info("write zookeeper tree to folder " + outputDir);
+            logger.info("begin write zookeeper tree to folder " + outputDir);
             for (TreeNode<zNode> znode : zktree) {
                 if (znode.data.has_children) {
                     File f = new File(outputDir + znode.data.path);
@@ -37,6 +37,7 @@ public class zkExportToFS implements Job {
                 }
                 writeZnode(znode.data);
             }
+            logger.info("end write zookeeper tree to folder " + outputDir);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

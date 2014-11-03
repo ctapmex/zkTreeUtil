@@ -38,6 +38,7 @@ public class zkExportToXmlFile implements Job {
     }
 
     private void writeFile() {
+        logger.info("begin write zookeeper tree to file " + output_file);
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -57,6 +58,7 @@ public class zkExportToXmlFile implements Job {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+        logger.info("end write zookeeper tree to file " + output_file);
     }
 
     private void fillXml(Document doc, Node root, TreeNode<zNode> zktree) {
