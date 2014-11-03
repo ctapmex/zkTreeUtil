@@ -1,6 +1,7 @@
 ==========================================
 zkTreeUtil - ZooKeeper Tree Utility
 Author: Dobrunov Aleksey (ctapmex)
+Homepage: https://github.com/ctapmex/zkTreeUtil
 ==========================================
 
 zkTreeUtil это приложение для работы с данными/деревом, хранимыми в ZooKeeper.
