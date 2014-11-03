@@ -77,7 +77,7 @@ public class zkExportToFile implements Job {
                 }
             }
         }
-        logger.info("begin write zookeeper tree to file " + output_file);
+        logger.info("end write zookeeper tree to file " + output_file);
     }
 
 }

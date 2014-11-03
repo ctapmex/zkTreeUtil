@@ -1,4 +1,4 @@
-==========================================
+ï»¿==========================================
 zkTreeUtil - ZooKeeper Tree Utility
 Author: Dobrunov Aleksey (ctapmex)
 Homepage: https://github.com/ctapmex/zkTreeUtil
@@ -16,29 +16,29 @@ usage: zkTreeUtil
                                    a normal, empty directory)
  -of,--output-file <filename>      output file to which znode information
                                    should be written
- -p,--path <znodepath>             path to the zookeeper subtree rootnode.
  -xf,--output-xmlfile <filename>   output xml-file to which znode
                                    information should be written
+ -p,--path <znodepath>             path to the zookeeper subtree rootnode.
  -z,--zookeeper <zkhosts>          zookeeper remote servers (ie
                                    "localhost:2181")
 
 Export is available in three formats: 
-  - The file structure (output-dir) 
-     As specified for the output directory is created for each node or folder 
-     or file. Repeating the tree structure. If the node is set 
-     (value), it is stored in a file. For nodes/folders the value stored in folders 
-     file '_znode'. 
-     The main limitation of this format - file redundant system does not support all 
-     characters in the name. For example ':'. 
-  - A flat file (output-file) 
-     In the set of output files created by the string of the form 
-     path=/ss val=dd type='ephemeral' 
-     path - the path node. 
-     val - the value, if specified 
-     type - the type of node. ephemeral - temporary node. 
-  - Xml file 
-     In the set of output files created nodes (znode), keeping all 
-     attribute information
+Â  - The file structure (output-dir) 
+Â Â Â Â  As specified for the output directory is created for each node or folder 
+Â Â Â Â  or file. Repeating the tree structure. If the node is set 
+Â Â Â Â  (value), it is stored in a file. For nodes/folders the value stored in folders 
+Â Â Â Â  file '_znode'. 
+Â Â Â Â  The main limitation of this format - file redundant system does not support all 
+Â Â Â Â  characters in the name. For example ':'. 
+Â  - A flat file (output-file) 
+Â Â Â Â  In the set of output files created by the string of the form 
+Â Â Â Â  path=/ss val=dd type='ephemeral' 
+Â Â Â Â  path - the path node. 
+Â Â Â Â  val - the value, if specified 
+Â Â Â Â  type - the type of node. ephemeral - temporary node. 
+Â  - Xml file 
+Â Â Â Â  In the set of output files created nodes (znode), keeping all 
+Â Â Â Â  attribute information
 
 To be able to export a certain subtree ZooKeeper, is the key 'p'. 
 The parameter 'z' is address of the server supports specifying multiple servers 
