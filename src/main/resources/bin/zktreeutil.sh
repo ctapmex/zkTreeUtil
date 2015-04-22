@@ -2,5 +2,5 @@
 
 echo Uadmin
 
-set cp=".;../lib/*"
+cp=".:../lib/*"
 java -cp $cp com.dobrunov.zktreeutil.zkTreeUtilMain $@
