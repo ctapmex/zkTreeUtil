@@ -16,7 +16,7 @@ usage: zkTreeUtil
                                    a normal, empty directory)
  -of,--output-file <filename>      output file to which znode information
                                    should be written
- -xf,--output-xmlfile <filename>   output xml-file to which znode
+ -ox,--output-xmlfile <filename>   output xml-file to which znode
                                    information should be written
  -p,--path <znodepath>             path to the zookeeper subtree rootnode.
  -z,--zookeeper <zkhosts>          zookeeper remote servers (ie

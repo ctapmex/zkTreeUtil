@@ -64,7 +64,7 @@ public class zkExportToFile implements Job {
                 if (znode.data.stat.getEphemeralOwner() != 0) {
                     writer.write("type='ephemeral'");
                 }
-                writer.write("\r\n");
+                writer.write(System.lineSeparator());
             }
             writer.flush();
         } catch (Exception e) {
