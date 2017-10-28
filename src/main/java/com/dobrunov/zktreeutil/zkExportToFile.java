@@ -53,15 +53,16 @@ public class zkExportToFile implements Job {
             writer = new FileWriter(output_file);
             for (TreeNode<zNode> znode : zktree) {
                 writer.write("path=" + start_znode + znode.data.path);
-                writer.write("\t");
                 if (znode.data.data != null && znode.data.data.length > 0) {
                     String str = new String(znode.data.data);
                     if (!str.equals("null")) {
+                        writer.write("\t");
                         writer.write("val=" + str);
                     }
                 }
-                writer.write("\t");
+
                 if (znode.data.stat.getEphemeralOwner() != 0) {
+                    writer.write("\t");
                     writer.write("type='ephemeral'");
                 }
                 writer.write(System.lineSeparator());
