@@ -54,3 +54,9 @@ Build instructions
 1. cd into this directory
 2. mvn clean package
 3. 'zkTreeUtil' created in target\distrib directory
+
+To run from an IDE (for example intellij)
+-----------------------------------------
+The main class is com.dobrunov.zktreeutil.zkTreeUtilMain
+To enable logging, add the vm argument -Dlog4j.configuration=bin/log4j.properties
+This is not required if you're running directly from 'zkTreeUtil' created in target\distrib directory
