@@ -1,4 +1,6 @@
-﻿==========================================
+No longer supported. 
+
+==========================================
 zkTreeUtil - ZooKeeper Tree Utility
 Author: Dobrunov Aleksey (ctapmex)
 Homepage: https://github.com/ctapmex/zkTreeUtil
